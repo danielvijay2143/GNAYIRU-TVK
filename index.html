@@ -1,267 +1,1197 @@
+```html
 <!DOCTYPE html>
 <html lang="ta">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ஞாயிறு ஊராட்சி — கிராம வளர்ச்சி திட்ட பணிகள்</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.3/papaparse.min.js"></script>
+
 <style>
-  :root{
-    --maroon:#7A0F2B; --maroon-dark:#52081C; --maroon-tint:#F4E4E8;
-    --gold:#C08A26; --gold-soft:#E7C878; --cream:#FBF6EC; --panel:#FFFFFF;
-    --ink:#2B211B; --ink-soft:#6E5F52; --line:#E6DCC9;
-    --green:#1E7A45; --green-bg:#E3F3E7; --amber:#A9660A; --amber-bg:#FBEDCB;
-    --grey:#6E6459; --grey-bg:#EFEAE0; --radius:10px;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fb;
+  color: #172033;
+  font-family: "Noto Sans Tamil", "Noto Sans", sans-serif;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #111827, #24324a);
+  color: #fff;
+  padding: 28px 18px;
+}
+
+.header-inner {
+  max-width: 1180px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: .9;
+}
+
+h1 {
+  margin: 7px 0 4px;
+  font-size: clamp(25px, 4vw, 38px);
+}
+
+.subtitle {
+  margin: 0;
+  color: #d7deea;
+  font-size: 14px;
+}
+
+/* ADMIN BUTTON */
+.admin-btn {
+  border: 1px solid rgba(255,255,255,.35);
+  background: #fff;
+  color: #111827;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-btn:hover {
+  background: #e8edf5;
+}
+
+/* MAIN */
+main {
+  max-width: 1180px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  background: #fff;
+  border: 1px solid #e5e9f1;
+  border-radius: 14px;
+  padding: 17px;
+  box-shadow: 0 5px 18px rgba(25,40,70,.05);
+}
+
+.stat small {
+  color: #68748a;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.stat strong {
+  font-size: 28px;
+}
+
+/* CONTROLS */
+.controls {
+  background: #fff;
+  border: 1px solid #e5e9f1;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+input,
+select {
+  font: inherit;
+  border: 1px solid #d5dce8;
+  border-radius: 9px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.search {
+  flex: 1;
+  min-width: 220px;
+}
+
+.refresh {
+  border: 0;
+  background: #172033;
+  color: #fff;
+  border-radius: 9px;
+  padding: 10px 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* TABLE */
+.table-wrap {
+  background: #fff;
+  border: 1px solid #e5e9f1;
+  border-radius: 14px;
+  overflow: auto;
+  box-shadow: 0 5px 18px rgba(25,40,70,.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th,
+td {
+  padding: 13px 12px;
+  text-align: left;
+  border-bottom: 1px solid #edf0f5;
+  vertical-align: top;
+}
+
+th {
+  background: #f8f9fc;
+  color: #526078;
+  font-size: 13px;
+  position: sticky;
+  top: 0;
+}
+
+td {
+  font-size: 14px;
+}
+
+/* STATUS */
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.unknown {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.empty {
+  text-align: center;
+  padding: 35px;
+  color: #69758a;
+}
+
+/* FOOTER */
+.footer {
+  padding: 24px 16px;
+  text-align: center;
+  color: #7b8495;
+  font-size: 12px;
+}
+
+/* LOGIN MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 50;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-card {
+  width: min(420px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-card h2 {
+  margin: 0 0 7px;
+}
+
+.modal-card p {
+  color: #69758a;
+  font-size: 13px;
+  margin: 0 0 18px;
+}
+
+.form-row {
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.form-row input {
+  width: 100%;
+}
+
+.login-actions {
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.login-btn,
+.cancel-btn {
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 15px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.login-btn {
+  background: #172033;
+  color: #fff;
+}
+
+.cancel-btn {
+  background: #edf0f5;
+  color: #263247;
+}
+
+.error {
+  color: #b42318;
+  font-size: 13px;
+  min-height: 20px;
+  margin-top: 8px;
+}
+
+/* MOBILE */
+@media (max-width: 800px) {
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{background:var(--cream);color:var(--ink);font-family:'Noto Sans Tamil','Noto Sans',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;}
-  a{color:inherit;}
-  .tricolor{height:4px;width:100%;background:linear-gradient(90deg,#E37B27 0 33%,#F5EEDD 33% 66%,#1E7A45 66% 100%);}
-  header.band{background:linear-gradient(155deg,var(--maroon) 0%, var(--maroon-dark) 100%);color:#F6EADC;padding:38px 20px 46px;position:relative;overflow:hidden;}
-  header.band::before{content:"";position:absolute;right:-90px;top:-90px;width:280px;height:280px;border-radius:50%;border:22px solid rgba(246,234,220,0.07);}
-  header.band::after{content:"";position:absolute;left:-60px;bottom:-120px;width:220px;height:220px;border-radius:50%;border:16px solid rgba(246,234,220,0.06);}
-  .band-inner{max-width:980px;margin:0 auto;position:relative;}
-  .org-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-  .emblem{width:46px;height:46px;border-radius:50%;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;box-shadow:0 0 0 3px rgba(246,234,220,0.18);}
-  .org-name{font-size:15px;letter-spacing:0.02em;color:#E9CFA0;font-weight:600;}
-  h1{margin:0 0 6px;font-size:clamp(28px,4.6vw,42px);font-weight:800;letter-spacing:0.01em;}
-  .subtitle{font-size:clamp(15px,2.2vw,18px);color:#EBD9C3;font-weight:500;margin:0;max-width:60ch;}
-  .stats{max-width:980px;margin:-30px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;z-index:2;}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 14px;box-shadow:0 8px 20px rgba(82,8,28,0.08);}
-  .stat .num{font-size:28px;font-weight:800;color:var(--maroon);line-height:1;}
-  .stat .lbl{font-size:13px;color:var(--ink-soft);margin-top:6px;font-weight:500;}
-  .stat.completed .num{color:var(--green);}
-  .stat.progress .num{color:var(--amber);}
-  main{max-width:980px;margin:0 auto;padding:34px 20px 70px;}
-  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px;}
-  .toolbar .filters{display:flex;gap:8px;flex-wrap:wrap;}
-  select, input[type=text]{font-family:inherit;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 12px;}
-  select:focus, input:focus{outline:2px solid var(--gold-soft);outline-offset:1px;}
-  button{font-family:inherit;cursor:pointer;}
-  .btn{border:none;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;text-decoration:none;display:inline-block;}
-  .btn-primary{background:var(--maroon);color:#fff;}
-  .btn-primary:hover{background:var(--maroon-dark);}
-  .btn-ghost{background:transparent;color:var(--maroon);border:1px solid var(--maroon);}
-  .btn-ghost:hover{background:var(--maroon-tint);}
-  .list{display:flex;flex-direction:column;gap:10px;}
-  .empty{text-align:center;padding:60px 20px;color:var(--ink-soft);border:1px dashed var(--line);border-radius:var(--radius);background:var(--panel);}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:start;transition:box-shadow .15s ease;}
-  .card:hover{box-shadow:0 6px 18px rgba(43,33,27,0.08);}
-  .card .no{font-weight:800;font-size:15px;width:36px;height:36px;border-radius:50%;background:var(--maroon-tint);display:flex;align-items:center;justify-content:center;color:var(--maroon);}
-  .card .body{min-width:0;}
-  .card .reason{font-size:15.5px;font-weight:600;margin:0 0 6px;color:var(--ink);}
-  .meta-row{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13px;color:var(--ink-soft);align-items:center;}
-  .meta-row .dept{background:var(--grey-bg);color:var(--grey);padding:2px 10px;border-radius:20px;font-weight:600;font-size:12.5px;}
-  .meta-row .app-no{font-family:'Noto Sans',monospace;font-size:12.5px;}
-  .card .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
-  .pill{font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:20px;white-space:nowrap;}
-  .pill.completed{background:var(--green-bg);color:var(--green);}
-  .pill.progress{background:var(--amber-bg);color:var(--amber);}
-  .pill.pending{background:var(--grey-bg);color:var(--grey);}
-  @media (max-width:640px){
-    .stats{grid-template-columns:repeat(2,1fr);}
-    .card{grid-template-columns:30px 1fr;}
-    .card .right{grid-column:1 / -1;flex-direction:row;justify-content:space-between;align-items:center;margin-top:6px;}
+
+  .header-inner {
+    align-items: flex-start;
+    flex-direction: column;
   }
-  .status-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;}
-  footer{text-align:center;padding:24px 20px 40px;color:var(--ink-soft);font-size:13px;}
+
+  .admin-btn {
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 450px) {
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
+
 <body>
 
-<div class="tricolor"></div>
-<header class="band">
-  <div class="band-inner">
-    <div class="org-row">
-      <div class="emblem">🏛️</div>
-      <div class="org-name">தமிழக வெற்றிக் கழகம் · ஞாயிறு ஊராட்சி</div>
+<!-- HEADER -->
+<header>
+
+  <div class="header-inner">
+
+    <div>
+
+      <div class="brand">
+        தமிழக வெற்றிக் கழகம் · ஞாயிறு ஊராட்சி
+      </div>
+
+      <h1>
+        கிராம வளர்ச்சி திட்ட பணிகள்
+      </h1>
+
+      <p class="subtitle">
+        ஞாயிறு கிராமத்தில் அரசிடம் கோரப்பட்ட பணிகள் மற்றும் அவற்றின் தற்போதைய நிலையை இங்கே காணலாம்.
+      </p>
+
     </div>
-    <h1>கிராம வளர்ச்சி திட்ட பணிகள்</h1>
-    <p class="subtitle">ஞாயிறு கிராமத்தில் அரசிடம் கோரப்பட்ட பணிகள் மற்றும் அவற்றின் தற்போதைய நிலையை இங்கே காணலாம்.</p>
+
+    <!-- ADMIN LOGIN -->
+    <button class="admin-btn" id="adminLoginBtn">
+      🔐 Admin Login
+    </button>
+
   </div>
+
 </header>
 
-<div class="stats" id="stats">
-  <div class="stat"><div class="num" id="statTotal">–</div><div class="lbl">மொத்த பணிகள்</div></div>
-  <div class="stat completed"><div class="num" id="statDone">–</div><div class="lbl">முடிந்தவை</div></div>
-  <div class="stat progress"><div class="num" id="statProgress">–</div><div class="lbl">நடைபெறுபவை</div></div>
-  <div class="stat"><div class="num" id="statPending">–</div><div class="lbl">நிலுவையில்</div></div>
-</div>
 
+<!-- MAIN -->
 <main>
-  <div class="status-bar">
-    <span id="lastUpdated">தரவு ஏற்றப்படுகிறது…</span>
-    <a class="btn btn-ghost" id="editSheetLink" href="#" target="_blank" rel="noopener">Google Sheet-இல் திருத்த</a>
-  </div>
 
-  <div class="toolbar">
-    <div class="filters">
-      <select id="filterStatus">
-        <option value="">அனைத்து நிலைகளும்</option>
-        <option value="COMPLETED">முடிந்தவை</option>
-        <option value="UNDER PROCESS">நடைபெறுபவை</option>
-        <option value="PENDING">நிலுவையில்</option>
-      </select>
-      <input type="text" id="filterSearch" placeholder="காரணம் / துறை தேடுக">
+  <!-- STATISTICS -->
+  <section class="stats">
+
+    <div class="stat">
+      <small>மொத்த பணிகள்</small>
+      <strong id="total">0</strong>
     </div>
-    <button class="btn btn-primary" id="refreshBtn">↻ புதுப்பிக்க</button>
-  </div>
 
-  <div class="list" id="list">
-    <div class="empty">பணிகள் ஏற்றப்படுகிறது…</div>
-  </div>
+    <div class="stat">
+      <small>நிறைவு</small>
+      <strong id="completed">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>நடைபெறுகிறது</small>
+      <strong id="progress">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>நிலுவையில்</small>
+      <strong id="pending">0</strong>
+    </div>
+
+  </section>
+
+
+  <!-- FILTERS -->
+  <section class="controls">
+
+    <input
+      class="search"
+      id="search"
+      type="search"
+      placeholder="பணி / துறை / காரணம் தேடுக..."
+    >
+
+    <select id="status">
+
+      <option value="">
+        அனைத்து நிலைகள்
+      </option>
+
+      <option value="COMPLETED">
+        நிறைவு
+      </option>
+
+      <option value="IN PROGRESS">
+        நடைபெறுகிறது
+      </option>
+
+      <option value="UNDER PROCESS">
+        நிலுவையில்
+      </option>
+
+    </select>
+
+    <button class="refresh" id="refresh">
+      ↻ புதுப்பிக்க
+    </button>
+
+  </section>
+
+
+  <!-- TABLE -->
+  <section class="table-wrap">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>வ. எண்</th>
+          <th>தேதி</th>
+          <th>காரணம்</th>
+          <th>துறை</th>
+          <th>மனு / கோரிக்கை</th>
+          <th>நிலை</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="tbody">
+
+        <tr>
+          <td colspan="6" class="empty">
+            தகவல்கள் ஏற்றப்படுகின்றன...
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </section>
+
 </main>
 
-<footer>ஞாயிறு ஊராட்சி கிராம வளர்ச்சி திட்ட பணிகள் பட்டியல் · தமிழக வெற்றிக் கழகம்<br>தரவு: Google Sheet-இலிருந்து நேரடியாக</footer>
+
+<div class="footer">
+  தகவல்கள் Google Sheet-ல் இருந்து தானாகப் பெறப்படுகின்றன.
+</div>
+
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+
+  <div class="modal-card">
+
+    <h2>
+      🔐 Admin Login
+    </h2>
+
+    <p>
+      Google Sheet நிர்வாகப் பக்கத்தைத் திறக்க உள்நுழையவும்.
+    </p>
+
+    <form id="loginForm">
+
+      <div class="form-row">
+
+        <label for="username">
+          Username
+        </label>
+
+        <input
+          id="username"
+          autocomplete="username"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-row">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+
+      </div>
+
+
+      <div class="error" id="loginError"></div>
+
+
+      <div class="login-actions">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          id="cancelLogin"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="login-btn"
+        >
+          Login
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
 
 <script>
-(function(){
-  // ====== CONFIGURE THESE TWO LINES ======
-  // 1) Publish your sheet: File > Share > Publish to web > select the tab > CSV > Publish.
-  //    Paste the resulting link below (looks like https://docs.google.com/.../pub?output=csv)
-  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQh9VFqCq_8tdoRKhNRmSCTeAoraBZBHFJXnWrEN6mmOHUhKXghInVcyybXGjvH4a_r5Q8f195klS2L/pub?output=csv";
-  // 2) Paste the normal edit link to your sheet (for the "Google Sheet-இல் திருத்த" button)
-  const SHEET_EDIT_URL = "https://docs.google.com/spreadsheets/d/1Hkau-nRZGhikbav9QZqeeFFEWD6-0-5WRlffImY6018/edit?gid=0#gid=0";
-  // ========================================
 
-  document.getElementById("editSheetLink").href = SHEET_EDIT_URL;
+/* =========================================
+   GOOGLE SHEET SETTINGS
+========================================= */
 
-  const $ = (sel) => document.querySelector(sel);
-  const list = $("#list");
-  let works = [];
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQh9VFqCq_8tdoRKhNRmSCTeAoraBZBHFJXnWrEN6mmOHUhKXghInVcyybXGjvH4a_r5Q8f195klS2L/pub?output=csv";
 
-  function statusMeta(status){
-    const s = (status||"").toUpperCase().trim();
-    if(s === "COMPLETED") return {cls:"completed", label:"முடிந்தது"};
-    if(s === "UNDER PROCESS" || s === "IN PROGRESS") return {cls:"progress", label:"நடைபெறுகிறது"};
-    return {cls:"pending", label: status ? status : "நிலுவையில்"};
+
+/* Google Sheet edit page */
+const SHEET_EDIT_URL =
+"https://docs.google.com/spreadsheets/d/1Hkau-nRZGhikbav9QzqeeFFEWD6-0-5WRlffImY6018/edit?gid=0#gid=0";
+
+
+/* =========================================
+   ADMIN LOGIN
+========================================= */
+
+const ADMIN_USERNAME = "VIJAY";
+const ADMIN_PASSWORD = "2143";
+
+
+/* =========================================
+   DATA
+========================================= */
+
+let allRows = [];
+
+
+/* =========================================
+   NORMALIZE COLUMN NAME
+========================================= */
+
+function normalizeKey(value) {
+
+  return String(value ?? "")
+    .replace(/\s+/g, "")
+    .replace(/[.]/g, "")
+    .trim();
+
+}
+
+
+/* =========================================
+   GET VALUE FROM GOOGLE SHEET ROW
+========================================= */
+
+function getValue(row, keywords) {
+
+  const keys = Object.keys(row);
+
+  for (const key of keys) {
+
+    const normalizedKey = normalizeKey(key);
+
+    for (const keyword of keywords) {
+
+      if (
+        normalizedKey.includes(
+          normalizeKey(keyword)
+        )
+      ) {
+
+        return String(
+          row[key] ?? ""
+        ).trim();
+
+      }
+
+    }
+
   }
 
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  return "";
+
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+function statusInfo(raw) {
+
+  const s =
+    String(raw || "")
+      .trim()
+      .toUpperCase();
+
+
+  if (
+    s.includes("COMPLETED") ||
+    s.includes("நிறைவு") ||
+    s.includes("முடிந்த")
+  ) {
+
+    return [
+      "completed",
+      "நிறைவு"
+    ];
+
   }
 
-  function render(){
-    const statusFilter = $("#filterStatus").value;
-    const q = $("#filterSearch").value.trim().toLowerCase();
 
-    let rows = works.slice();
-    let done=0, prog=0, pend=0;
-    rows.forEach(w=>{
-      const s = (w.status||"").toUpperCase().trim();
-      if(s==="COMPLETED") done++;
-      else if(s==="UNDER PROCESS" || s==="IN PROGRESS") prog++;
-      else pend++;
-    });
-    $("#statTotal").textContent = rows.length;
-    $("#statDone").textContent = done;
-    $("#statProgress").textContent = prog;
-    $("#statPending").textContent = pend;
+  if (
+    s.includes("IN PROGRESS") ||
+    s.includes("நடைபெ") ||
+    s.includes("PROGRESS")
+  ) {
 
-    if(statusFilter) rows = rows.filter(w=>(w.status||"").toUpperCase().trim()===statusFilter || (statusFilter==="PENDING" && !["COMPLETED","UNDER PROCESS","IN PROGRESS"].includes((w.status||"").toUpperCase().trim())));
-    if(q) rows = rows.filter(w=>
-      (w.reason||"").toLowerCase().includes(q) ||
-      (w.dept||"").toLowerCase().includes(q) ||
-      (w.appNo||"").toLowerCase().includes(q)
+    return [
+      "progress",
+      "நடைபெறுகிறது"
+    ];
+
+  }
+
+
+  if (
+    s.includes("UNDER PROCESS") ||
+    s.includes("நிலுவை") ||
+    s.includes("PENDING")
+  ) {
+
+    return [
+      "pending",
+      "நிலுவையில்"
+    ];
+
+  }
+
+
+  return [
+    "unknown",
+    raw || "தெரியவில்லை"
+  ];
+
+}
+
+
+/* =========================================
+   HTML SECURITY
+========================================= */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      character => ({
+
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+
+      }[character])
     );
 
-    if(rows.length === 0){
-      list.innerHTML = '<div class="empty">பணிகள் எதுவும் இல்லை.</div>';
-      return;
-    }
+}
 
-    list.innerHTML = rows.map(w=>{
-      const sm = statusMeta(w.status);
-      return `<div class="card">
-        <div class="no">${escapeHtml(w.no||"–")}</div>
-        <div class="body">
-          <p class="reason">${escapeHtml(w.reason||"")}</p>
-          <div class="meta-row">
-            <span>${escapeHtml(w.date||"")}</span>
-            ${w.dept ? `<span class="dept">${escapeHtml(w.dept)}</span>` : ""}
-            ${w.appNo ? `<span class="app-no">${escapeHtml(w.appNo)}</span>` : ""}
-          </div>
-        </div>
-        <div class="right">
-          <span class="pill ${sm.cls}">${sm.label}</span>
-        </div>
-      </div>`;
-    }).join("");
-  }
 
-  function findCol(header, candidates){
-    for(let i=0;i<header.length;i++){
-      const h = (header[i]||"").trim();
-      if(candidates.some(c=>h.includes(c))) return i;
-    }
-    return -1;
-  }
+/* =========================================
+   RENDER TABLE
+========================================= */
 
-  function parseRows(rows){
-    // find the header row (contains "எண்" and "தேதி")
-    let headerIdx = -1;
-    for(let i=0;i<rows.length;i++){
-      const joined = rows[i].join("|");
-      if(joined.includes("தேதி") && (joined.includes("எண்") || joined.includes("காரணம்"))){
-        headerIdx = i; break;
-      }
-    }
-    if(headerIdx === -1) return [];
-    const header = rows[headerIdx];
-    const cNo = findCol(header, ["வ. எண்","வ.எண்","எண்"]);
-    const cDate = findCol(header, ["தேதி"]);
-    const cReason = findCol(header, ["காரணம்"]);
-    const cDept = findCol(header, ["துறை"]);
-    const cApp = findCol(header, ["மனு"]);
-    const cStatus = findCol(header, ["நிலை"]);
+function render() {
 
-    const out = [];
-    for(let i=headerIdx+1;i<rows.length;i++){
-      const r = rows[i];
-      const reason = cReason>=0 ? (r[cReason]||"").trim() : "";
-      if(!reason) continue;
-      out.push({
-        no: cNo>=0 ? (r[cNo]||"").trim() : "",
-        date: cDate>=0 ? (r[cDate]||"").trim() : "",
-        reason,
-        dept: cDept>=0 ? (r[cDept]||"").trim() : "",
-        appNo: cApp>=0 ? (r[cApp]||"").trim() : "",
-        status: cStatus>=0 ? (r[cStatus]||"").trim() : ""
-      });
-    }
-    return out;
-  }
+  const searchText =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
 
-  function loadData(){
-    if(!SHEET_CSV_URL || SHEET_CSV_URL.indexOf("PASTE_YOUR") === 0){
-      list.innerHTML = '<div class="empty">SHEET_CSV_URL இன்னும் அமைக்கப்படவில்லை. index.html கோப்பில் மேலே உள்ள வழிமுறையைப் பின்பற்றவும்.</div>';
-      $("#lastUpdated").textContent = "அமைக்கப்படவில்லை";
-      return;
-    }
-    Papa.parse(SHEET_CSV_URL, {
-      download: true,
-      complete: function(results){
-        works = parseRows(results.data);
-        render();
-        $("#lastUpdated").textContent = "கடைசியாகப் புதுப்பிக்கப்பட்டது: " + new Date().toLocaleString('ta-IN');
-      },
-      error: function(){
-        list.innerHTML = '<div class="empty">தரவை ஏற்ற இயலவில்லை. Sheet publish செய்யப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</div>';
-      }
+
+  const selectedStatus =
+    document
+      .getElementById("status")
+      .value;
+
+
+  const filteredRows =
+    allRows.filter(row => {
+
+      const statusRaw =
+        getValue(
+          row,
+          ["நிலை", "status"]
+        );
+
+
+      const searchableText = [
+
+        getValue(
+          row,
+          ["வ. எண்", "வ.எண்", "எண்"]
+        ),
+
+        getValue(
+          row,
+          ["தேதி", "date"]
+        ),
+
+        getValue(
+          row,
+          ["காரணம்", "reason"]
+        ),
+
+        getValue(
+          row,
+          ["துறை", "department"]
+        ),
+
+        getValue(
+          row,
+          [
+            "மனு",
+            "கோரிக்கை",
+            "petition",
+            "request"
+          ]
+        ),
+
+        statusRaw
+
+      ]
+      .join(" ")
+      .toLowerCase();
+
+
+      const searchMatch =
+        !searchText ||
+        searchableText.includes(searchText);
+
+
+      const statusLabel =
+        statusInfo(statusRaw)[1];
+
+
+      const statusMatch =
+        !selectedStatus ||
+        statusRaw
+          .toUpperCase()
+          .includes(selectedStatus) ||
+
+        (
+          selectedStatus === "COMPLETED" &&
+          statusLabel === "நிறைவு"
+        ) ||
+
+        (
+          selectedStatus === "IN PROGRESS" &&
+          statusLabel === "நடைபெறுகிறது"
+        ) ||
+
+        (
+          selectedStatus === "UNDER PROCESS" &&
+          statusLabel === "நிலுவையில்"
+        );
+
+
+      return (
+        searchMatch &&
+        statusMatch
+      );
+
     });
+
+
+  /* STATISTICS */
+
+  document.getElementById("total").textContent =
+    allRows.length;
+
+
+  document.getElementById("completed").textContent =
+    allRows.filter(
+      row =>
+        statusInfo(
+          getValue(
+            row,
+            ["நிலை", "status"]
+          )
+        )[0] === "completed"
+    ).length;
+
+
+  document.getElementById("progress").textContent =
+    allRows.filter(
+      row =>
+        statusInfo(
+          getValue(
+            row,
+            ["நிலை", "status"]
+          )
+        )[0] === "progress"
+    ).length;
+
+
+  document.getElementById("pending").textContent =
+    allRows.filter(
+      row =>
+        statusInfo(
+          getValue(
+            row,
+            ["நிலை", "status"]
+          )
+        )[0] === "pending"
+    ).length;
+
+
+  /* TABLE */
+
+  const tbody =
+    document.getElementById("tbody");
+
+
+  if (!filteredRows.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="empty">
+          தகவல்கள் எதுவும் இல்லை.
+        </td>
+      </tr>
+    `;
+
+    return;
+
   }
 
-  $("#filterStatus").addEventListener("change", render);
-  $("#filterSearch").addEventListener("input", render);
-  $("#refreshBtn").addEventListener("click", loadData);
 
-  loadData();
-  setInterval(loadData, 5 * 60 * 1000); // auto-refresh every 5 minutes
-})();
+  tbody.innerHTML =
+    filteredRows.map(row => {
+
+      const [
+        statusClass,
+        statusLabel
+      ] =
+        statusInfo(
+          getValue(
+            row,
+            ["நிலை", "status"]
+          )
+        );
+
+
+      return `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              getValue(
+                row,
+                [
+                  "வ. எண்",
+                  "வ.எண்",
+                  "எண்"
+                ]
+              )
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              getValue(
+                row,
+                ["தேதி", "date"]
+              )
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              getValue(
+                row,
+                ["காரணம்", "reason"]
+              )
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              getValue(
+                row,
+                ["துறை", "department"]
+              )
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              getValue(
+                row,
+                [
+                  "மனு",
+                  "கோரிக்கை",
+                  "petition",
+                  "request"
+                ]
+              )
+            )}
+          </td>
+
+          <td>
+            <span class="badge ${statusClass}">
+              ${escapeHtml(statusLabel)}
+            </span>
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================
+   LOAD GOOGLE SHEET
+========================================= */
+
+function loadData() {
+
+  document.getElementById("tbody").innerHTML = `
+    <tr>
+      <td colspan="6" class="empty">
+        தகவல்கள் ஏற்றப்படுகின்றன...
+      </td>
+    </tr>
+  `;
+
+
+  Papa.parse(
+    CSV_URL,
+    {
+
+      download: true,
+
+      header: true,
+
+      skipEmptyLines: true,
+
+
+      complete: function(results) {
+
+        allRows =
+          Array.isArray(results.data)
+            ? results.data
+            : [];
+
+
+        render();
+
+      },
+
+
+      error: function(error) {
+
+        document.getElementById("tbody").innerHTML = `
+          <tr>
+            <td colspan="6" class="empty">
+              தகவல்களை ஏற்ற முடியவில்லை.
+              மீண்டும் புதுப்பிக்கவும்.
+            </td>
+          </tr>
+        `;
+
+        console.error(error);
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   LOGIN MODAL
+========================================= */
+
+const loginModal =
+  document.getElementById("loginModal");
+
+const username =
+  document.getElementById("username");
+
+const password =
+  document.getElementById("password");
+
+const loginError =
+  document.getElementById("loginError");
+
+
+/* OPEN LOGIN */
+
+document
+  .getElementById("adminLoginBtn")
+  .onclick = function() {
+
+    loginError.textContent = "";
+
+    username.value = "";
+
+    password.value = "";
+
+    loginModal.classList.add("show");
+
+    setTimeout(
+      () => username.focus(),
+      50
+    );
+
+  };
+
+
+/* CANCEL */
+
+document
+  .getElementById("cancelLogin")
+  .onclick = function() {
+
+    loginModal.classList.remove("show");
+
+  };
+
+
+/* CLICK OUTSIDE MODAL */
+
+loginModal.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target === loginModal
+    ) {
+
+      loginModal.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* LOGIN */
+
+document
+  .getElementById("loginForm")
+  .addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      if (
+        username.value.trim() ===
+          ADMIN_USERNAME &&
+
+        password.value ===
+          ADMIN_PASSWORD
+      ) {
+
+        loginModal.classList.remove(
+          "show"
+        );
+
+
+        /*
+          OPEN GOOGLE SHEET
+          ONLY AFTER LOGIN
+        */
+
+        window.open(
+          SHEET_EDIT_URL,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
+
+      } else {
+
+        loginError.textContent =
+          "Username அல்லது Password தவறாக உள்ளது.";
+
+        password.value = "";
+
+        password.focus();
+
+      }
+
+    }
+  );
+
+
+/* =========================================
+   FILTER EVENTS
+========================================= */
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    render
+  );
+
+
+document
+  .getElementById("status")
+  .addEventListener(
+    "change",
+    render
+  );
+
+
+document
+  .getElementById("refresh")
+  .addEventListener(
+    "click",
+    loadData
+  );
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+loadData();
+
+
+/* AUTO REFRESH EVERY 5 MINUTES */
+
+setInterval(
+  loadData,
+  5 * 60 * 1000
+);
+
 </script>
+
 </body>
 </html>
+```
