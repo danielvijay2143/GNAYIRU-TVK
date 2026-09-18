@@ -920,55 +920,81 @@
 }
 </style>
 
+<!-- VISITOR COUNTER -->
+<div class="visitor-counter">
+  👁️ இன்று: <strong id="todayVisitors">0</strong>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  👥 மொத்தம்: <strong id="totalVisitors">0</strong>
+</div>
+
+<style>
+.visitor-counter{
+  text-align:center;
+  margin:20px auto 30px;
+  padding:12px;
+  color:#6E5F52;
+  font-size:13px;
+}
+
+.visitor-counter strong{
+  color:#7A0F2B;
+  font-size:18px;
+  font-weight:800;
+}
+</style>
+
 <script>
-(function(){
+(function () {
 
   const namespace = "gnayiru-ooratchi-2026";
 
-  const totalKey = "total-visitors";
+  // India date (Tamil Nadu)
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata"
+  }).format(new Date());
 
-  const todayKey =
-    "today-" +
-    new Date().toISOString().slice(0,10);
+  async function getCounter(key) {
 
-  async function updateVisitors(){
+    const url =
+      "https://api.counterapi.dev/v1/" +
+      namespace +
+      "/" +
+      key +
+      "/up";
 
-    try{
+    const response = await fetch(url);
+    const data = await response.json();
 
-      const total =
-        await fetch(
-          "https://api.counterapi.dev/v1/" +
-          namespace +
-          "/" +
-          totalKey +
-          "/up"
-        ).then(r => r.json());
+    console.log("Counter response:", data);
 
-      const today =
-        await fetch(
-          "https://api.counterapi.dev/v1/" +
-          namespace +
-          "/" +
-          todayKey +
-          "/up"
-        ).then(r => r.json());
-
-      document.getElementById("totalVisitors")
-        .textContent =
-        Number(total.count).toLocaleString("ta-IN");
-
-      document.getElementById("todayVisitors")
-        .textContent =
-        Number(today.count).toLocaleString("ta-IN");
-
+    // Check that count really exists
+    if (typeof data.count !== "number") {
+      throw new Error("Invalid counter response");
     }
-    catch(error){
 
-      document.getElementById("todayVisitors")
-        .textContent = "–";
+    return data.count;
+  }
 
-      document.getElementById("totalVisitors")
-        .textContent = "–";
+  async function updateVisitors() {
+
+    try {
+
+      const total = await getCounter("total-visitors");
+
+      const todayCount = await getCounter("today-" + today);
+
+      document.getElementById("totalVisitors").textContent =
+        total.toLocaleString("en-IN");
+
+      document.getElementById("todayVisitors").textContent =
+        todayCount.toLocaleString("en-IN");
+
+    } catch (error) {
+
+      console.error("Visitor counter error:", error);
+
+      document.getElementById("totalVisitors").textContent = "0";
+      document.getElementById("todayVisitors").textContent = "0";
 
     }
 
@@ -977,9 +1003,4 @@
   updateVisitors();
 
 })();
-</script>
-```
-
-</body>
-</html>
-```
+</script>>
