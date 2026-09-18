@@ -900,9 +900,9 @@
 
 <!-- VISITOR COUNTER -->
 <div class="visitor-counter">
-  👁️ இன்று: <strong id="todayVisitors">0</strong>
+  👁️ இன்று: <strong id="todayVisitors">–</strong>
   &nbsp;&nbsp;|&nbsp;&nbsp;
-  👥 மொத்தம்: <strong id="totalVisitors">0</strong>
+  👥 மொத்தம்: <strong id="totalVisitors">–</strong>
 </div>
 
 <style>
@@ -921,58 +921,43 @@
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+
 <script>
-(function () {
+(function(){
 
-  const namespace = "gnayiru-ooratchi-2026";
+  const counter = new Counter({
+    workspace: "YOUR_WORKSPACE_NAME",
+    accessToken: "YOUR_ACCESS_TOKEN"
+  });
 
-  // India date (Tamil Nadu)
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Kolkata"
   }).format(new Date());
 
-  async function getCounter(key) {
+  async function updateVisitors(){
 
-    const url =
-      "https://api.counterapi.dev/v1/" +
-      namespace +
-      "/" +
-      key +
-      "/up";
+    try{
 
-    const response = await fetch(url);
-    const data = await response.json();
+      // TOTAL
+      const total = await counter.up("total-visitors");
 
-    console.log("Counter response:", data);
-
-    // Check that count really exists
-    if (typeof data.count !== "number") {
-      throw new Error("Invalid counter response");
-    }
-
-    return data.count;
-  }
-
-  async function updateVisitors() {
-
-    try {
-
-      const total = await getCounter("total-visitors");
-
-      const todayCount = await getCounter("today-" + today);
+      // TODAY
+      const todayCount =
+        await counter.up("today-" + today);
 
       document.getElementById("totalVisitors").textContent =
-        total.toLocaleString("en-IN");
+        Number(total.value).toLocaleString("en-IN");
 
       document.getElementById("todayVisitors").textContent =
-        todayCount.toLocaleString("en-IN");
+        Number(todayCount.value).toLocaleString("en-IN");
 
-    } catch (error) {
+    }catch(error){
 
       console.error("Visitor counter error:", error);
 
-      document.getElementById("totalVisitors").textContent = "0";
-      document.getElementById("todayVisitors").textContent = "0";
+      document.getElementById("todayVisitors").textContent = "–";
+      document.getElementById("totalVisitors").textContent = "–";
 
     }
 
@@ -981,4 +966,4 @@
   updateVisitors();
 
 })();
-</script>>
+</script>
