@@ -336,7 +336,7 @@ input:focus{
   const ADMIN_PASSWORD = "2143";
 
   const SHEET_EDIT_URL =
-    "https://docs.google.com/spreadsheets/d/1Hkau-nRZGhikbav9QZqeeFFEWD6-0-5WRlffImY6018/edit?gid=0#gid=0";
+    "https://docs.google.com/spreadsheets/d/1Hkau-nRZGhikbav9QZqeeFFEWD6-0-5WRlffImY6018/edit";
 
   const loginBox =
     document.getElementById("loginBox");
