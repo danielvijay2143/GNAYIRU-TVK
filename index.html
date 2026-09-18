@@ -896,6 +896,89 @@
 
 })();
 </script>
+```html
+<!-- VISITOR COUNTER -->
+<div class="visitor-counter">
+  👁️ இன்று: <strong id="todayVisitors">–</strong>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  👥 மொத்தம்: <strong id="totalVisitors">–</strong>
+</div>
+
+<style>
+.visitor-counter{
+  text-align:center;
+  margin:20px auto 30px;
+  padding:12px;
+  color:#6E5F52;
+  font-size:13px;
+}
+
+.visitor-counter strong{
+  color:#7A0F2B;
+  font-size:18px;
+  font-weight:800;
+}
+</style>
+
+<script>
+(function(){
+
+  const namespace = "gnayiru-ooratchi-2026";
+
+  const totalKey = "total-visitors";
+
+  const todayKey =
+    "today-" +
+    new Date().toISOString().slice(0,10);
+
+  async function updateVisitors(){
+
+    try{
+
+      const total =
+        await fetch(
+          "https://api.counterapi.dev/v1/" +
+          namespace +
+          "/" +
+          totalKey +
+          "/up"
+        ).then(r => r.json());
+
+      const today =
+        await fetch(
+          "https://api.counterapi.dev/v1/" +
+          namespace +
+          "/" +
+          todayKey +
+          "/up"
+        ).then(r => r.json());
+
+      document.getElementById("totalVisitors")
+        .textContent =
+        Number(total.count).toLocaleString("ta-IN");
+
+      document.getElementById("todayVisitors")
+        .textContent =
+        Number(today.count).toLocaleString("ta-IN");
+
+    }
+    catch(error){
+
+      document.getElementById("todayVisitors")
+        .textContent = "–";
+
+      document.getElementById("totalVisitors")
+        .textContent = "–";
+
+    }
+
+  }
+
+  updateVisitors();
+
+})();
+</script>
+```
 
 </body>
 </html>
