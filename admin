@@ -1,0 +1,459 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Login — ஞாயிறு ஊராட்சி</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+>
+
+<style>
+
+:root{
+  --maroon:#7A0F2B;
+  --maroon-dark:#52081C;
+  --cream:#FBF6EC;
+  --panel:#FFFFFF;
+  --ink:#2B211B;
+  --ink-soft:#6E5F52;
+  --line:#E6DCC9;
+  --gold:#C08A26;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+}
+
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:
+    'Noto Sans Tamil',
+    'Noto Sans',
+    system-ui,
+    sans-serif;
+}
+
+.tricolor{
+  height:4px;
+  width:100%;
+  background:
+    linear-gradient(
+      90deg,
+      #E37B27 0 33%,
+      #F5EEDD 33% 66%,
+      #1E7A45 66% 100%
+    );
+}
+
+.page{
+  min-height:calc(100vh - 4px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+}
+
+.login-card{
+  width:100%;
+  max-width:420px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(82,8,28,.10);
+}
+
+.logo{
+  width:58px;
+  height:58px;
+  margin:0 auto 16px;
+  border-radius:50%;
+  background:#E7C878;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+}
+
+h1{
+  text-align:center;
+  margin:0;
+  color:var(--maroon);
+  font-size:26px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:14px;
+  margin:7px 0 25px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin:14px 0 6px;
+}
+
+input{
+  width:100%;
+  padding:12px 13px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--ink);
+}
+
+input:focus{
+  outline:2px solid #E7C878;
+  outline-offset:1px;
+}
+
+.login-btn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:0;
+  border-radius:8px;
+  background:var(--maroon);
+  color:white;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.login-btn:hover{
+  background:var(--maroon-dark);
+}
+
+.error{
+  display:none;
+  margin-top:14px;
+  padding:10px;
+  border-radius:7px;
+  background:#F4E4E8;
+  color:var(--maroon);
+  font-size:13px;
+  text-align:center;
+  font-weight:600;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:18px;
+  color:var(--maroon);
+  font-size:13px;
+  text-decoration:none;
+}
+
+.back:hover{
+  text-decoration:underline;
+}
+
+.admin-panel{
+  display:none;
+  text-align:center;
+}
+
+.admin-panel h2{
+  color:var(--maroon);
+  margin-top:0;
+}
+
+.sheet-btn{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 20px;
+  background:var(--maroon);
+  color:#fff;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:700;
+}
+
+.sheet-btn:hover{
+  background:var(--maroon-dark);
+}
+
+.logout-btn{
+  display:block;
+  margin:15px auto 0;
+  border:1px solid var(--maroon);
+  background:transparent;
+  color:var(--maroon);
+  padding:9px 18px;
+  border-radius:8px;
+  font-family:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="tricolor"></div>
+
+<div class="page">
+
+  <div class="login-card">
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+
+      <div class="logo">🔐</div>
+
+      <h1>Admin Login</h1>
+
+      <p class="subtitle">
+        ஞாயிறு ஊராட்சி — நிர்வாகப் பகுதி
+      </p>
+
+      <form id="loginForm">
+
+        <label for="username">
+          Username
+        </label>
+
+        <input
+          type="text"
+          id="username"
+          autocomplete="username"
+          required
+        >
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          type="submit"
+          class="login-btn"
+        >
+          LOGIN
+        </button>
+
+      </form>
+
+      <div
+        id="error"
+        class="error"
+      >
+        Username அல்லது Password தவறாக உள்ளது.
+      </div>
+
+      <a
+        href="index.html"
+        class="back"
+      >
+        ← மீண்டும் பணிகள் பக்கத்திற்கு
+      </a>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+    <div
+      id="adminPanel"
+      class="admin-panel"
+    >
+
+      <div class="logo">✅</div>
+
+      <h2>Admin Access</h2>
+
+      <p>
+        Login வெற்றிகரமாக முடிந்தது.
+      </p>
+
+      <a
+        class="sheet-btn"
+        id="sheetLink"
+        href="#"
+        target="_blank"
+        rel="noopener"
+      >
+        📊 Google Sheet Update செய்ய
+      </a>
+
+      <button
+        class="logout-btn"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+(function(){
+
+  /*
+   * BASIC CLIENT-SIDE LOGIN
+   *
+   * Username : VIJAY
+   * Password : 2143
+   *
+   * IMPORTANT:
+   * This is NOT secure server-side authentication.
+   */
+
+  const ADMIN_USERNAME = "VIJAY";
+  const ADMIN_PASSWORD = "2143";
+
+  const SHEET_EDIT_URL =
+    "https://docs.google.com/spreadsheets/d/1Hkau-nRZGhikbav9QZqeeFFEWD6-0-5WRlffImY6018/edit?gid=0#gid=0";
+
+  const loginBox =
+    document.getElementById("loginBox");
+
+  const adminPanel =
+    document.getElementById("adminPanel");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const error =
+    document.getElementById("error");
+
+  const sheetLink =
+    document.getElementById("sheetLink");
+
+  const logoutBtn =
+    document.getElementById("logoutBtn");
+
+
+  sheetLink.href = SHEET_EDIT_URL;
+
+
+  function showAdmin(){
+
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+
+  }
+
+
+  function showLogin(){
+
+    loginBox.style.display = "block";
+    adminPanel.style.display = "none";
+
+  }
+
+
+  loginForm.addEventListener(
+    "submit",
+    function(e){
+
+      e.preventDefault();
+
+      const username =
+        document
+          .getElementById("username")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+      if(
+        username === ADMIN_USERNAME &&
+        password === ADMIN_PASSWORD
+      ){
+
+        sessionStorage.setItem(
+          "adminLoggedIn",
+          "true"
+        );
+
+        error.style.display = "none";
+
+        showAdmin();
+
+      }
+      else{
+
+        error.style.display = "block";
+
+      }
+
+    }
+  );
+
+
+  logoutBtn.addEventListener(
+    "click",
+    function(){
+
+      sessionStorage.removeItem(
+        "adminLoggedIn"
+      );
+
+      showLogin();
+
+      document
+        .getElementById("username")
+        .value = "";
+
+      document
+        .getElementById("password")
+        .value = "";
+
+    }
+  );
+
+
+  if(
+    sessionStorage.getItem(
+      "adminLoggedIn"
+    ) === "true"
+  ){
+
+    showAdmin();
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
+```
