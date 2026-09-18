@@ -898,11 +898,11 @@
 </script>
 
 
-<!-- VISITOR COUNTER -->
+<!-- FREE VISITOR COUNTER -->
 <div class="visitor-counter">
-  👁️ இன்று: <strong id="todayVisitors">–</strong>
+  👁️ இன்று: <strong id="todayVisitors">0</strong>
   &nbsp;&nbsp;|&nbsp;&nbsp;
-  👥 மொத்தம்: <strong id="totalVisitors">–</strong>
+  👥 மொத்தம்: <strong id="totalVisitors">0</strong>
 </div>
 
 <style>
@@ -921,49 +921,67 @@
 }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+<!-- FREE COUNTER API -->
+<script src="https://counterapi.com/c.js" async></script>
 
 <script>
 (function(){
 
-  const counter = new Counter({
-    workspace: "YOUR_WORKSPACE_NAME",
-    accessToken: "YOUR_ACCESS_TOKEN"
-  });
+  const todayKey =
+    "today-" +
+    new Date().toLocaleDateString("en-CA", {
+      timeZone:"Asia/Kolkata"
+    });
 
-  const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Kolkata"
-  }).format(new Date());
+  // Total visitors
+  const total = document.createElement("div");
+  total.className = "counterapi";
+  total.setAttribute("ns","gnayiru-ooratchi");
+  total.setAttribute("action","view");
+  total.setAttribute("key","total-visitors");
+  total.setAttribute("noCss","true");
+  total.setAttribute("noIcon","true");
+  total.setAttribute("noLink","true");
+  total.style.display = "none";
 
-  async function updateVisitors(){
+  // Today visitors
+  const today = document.createElement("div");
+  today.className = "counterapi";
+  today.setAttribute("ns","gnayiru-ooratchi");
+  today.setAttribute("action","view");
+  today.setAttribute("key",todayKey);
+  today.setAttribute("noCss","true");
+  today.setAttribute("noIcon","true");
+  today.setAttribute("noLink","true");
+  today.style.display = "none";
 
-    try{
+  document.body.appendChild(total);
+  document.body.appendChild(today);
 
-      // TOTAL
-      const total = await counter.up("total-visitors");
+  // Read CounterAPI values
+  const observer = new MutationObserver(function(){
 
-      // TODAY
-      const todayCount =
-        await counter.up("today-" + today);
+    const values = document.querySelectorAll(
+      '.counterapi'
+    );
 
+    if(values[0] && values[0].innerText){
       document.getElementById("totalVisitors").textContent =
-        Number(total.value).toLocaleString("en-IN");
-
-      document.getElementById("todayVisitors").textContent =
-        Number(todayCount.value).toLocaleString("en-IN");
-
-    }catch(error){
-
-      console.error("Visitor counter error:", error);
-
-      document.getElementById("todayVisitors").textContent = "–";
-      document.getElementById("totalVisitors").textContent = "–";
-
+        values[0].innerText.replace(/[^\d]/g,"") || "0";
     }
 
-  }
+    if(values[1] && values[1].innerText){
+      document.getElementById("todayVisitors").textContent =
+        values[1].innerText.replace(/[^\d]/g,"") || "0";
+    }
 
-  updateVisitors();
+  });
+
+  observer.observe(document.body,{
+    childList:true,
+    subtree:true,
+    characterData:true
+  });
 
 })();
 </script>
