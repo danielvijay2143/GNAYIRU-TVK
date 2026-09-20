@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ஞாயிறு ஊராட்சி — எங்களின் நிறைவுற்ற பணிகள்</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --maroon:#7A0F2B;
+    --maroon-dark:#52081C;
+    --maroon-tint:#F4E4E8;
+    --gold:#C08A26;
+    --gold-soft:#E7C878;
+    --cream:#FBF6EC;
+    --panel:#FFFFFF;
+    --ink:#2B211B;
+    --ink-soft:#6E5F52;
+    --line:#E6DCC9;
+    --green:#1E7A45;
+    --radius:10px;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    padding:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Noto Sans Tamil','Noto Sans',system-ui,sans-serif;
+    line-height:1.5;
+  }
+
+  a{color:inherit; text-decoration:none;}
+
+  .tricolor{
+    height:4px;
+    width:100%;
+    background:linear-gradient(90deg, #E37B27 0 33%, #F5EEDD 33% 66%, #1E7A45 66% 100%);
+  }
+
+  header.band{
+    background:linear-gradient(155deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+    color:#F6EADC;
+    padding:38px 20px 46px;
+    position:relative;
+  }
+
+  .band-inner{
+    max-width:980px;
+    margin:0 auto;
+  }
+
+  .back-btn{
+    display:inline-block;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    color:#fff;
+    padding:8px 14px;
+    border-radius:7px;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:16px;
+    transition:all 0.25s ease;
+  }
+
+  .back-btn:hover{
+    background:#fff;
+    color:var(--maroon);
+  }
+
+  h1{
+    margin:0 0 6px;
+    font-size:clamp(26px,4vw,38px);
+    font-weight:800;
+  }
+
+  .subtitle{
+    font-size:clamp(14px,2vw,17px);
+    color:#EBD9C3;
+    margin:0;
+  }
+
+  main{
+    max-width:980px;
+    margin:0 auto;
+    padding:34px 20px 70px;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .gallery-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(122, 15, 43, 0.15);
+    border-color: var(--gold-soft);
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .gallery-info {
+    padding: 14px 16px;
+  }
+
+  .gallery-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--maroon);
+    margin: 0 0 6px;
+  }
+
+  .gallery-date {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 16px;
+  }
+
+  .modal-card {
+    background: var(--panel);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 650px;
+    padding: 20px;
+    position: relative;
+    text-align: center;
+  }
+
+  .modal-card img {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 26px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  footer{
+    text-align:center;
+    padding:24px 20px 40px;
+    color:var(--ink-soft);
+    font-size:13px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="tricolor"></div>
+
+<header class="band">
+  <div class="band-inner">
+    <a href="index.html" class="back-btn">⬅ முகப்பு பக்கம் திரும்பு</a>
+    <h1>எங்களின் நிறைவுற்ற பணிகள்</h1>
+    <p class="subtitle">ஞாயிறு ஊராட்சியில் வெற்றிகரமாக முடிக்கப்பட்ட வளர்ச்சி திட்டங்களின் புகைப்படங்கள்</p>
+  </div>
+</header>
+
+<main>
+  <div class="gallery-grid" id="galleryGrid">
+    <!-- SAMPLE WORK ITEMS (Replace images/descriptions with your actual files) -->
+    <div class="gallery-card">
+      <img src="https://via.placeholder.com/600x400?text=Work+1" alt="பணி 1" class="gallery-img" onclick="openImage(this.src, 'குடிநீர் சுத்திகரிப்பு நிலையம் பராமரிப்பு')">
+      <div class="gallery-info">
+        <div class="gallery-title">குடிநீர் சுத்திகரிப்பு நிலையம் பராமரிப்பு</div>
+        <div class="gallery-date">முடிவுற்ற நாள்: 12/03/2026</div>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="https://via.placeholder.com/600x400?text=Work+2" alt="பணி 2" class="gallery-img" onclick="openImage(this.src, 'தெரு விளக்குகள் அமைத்தல் பணி')">
+      <div class="gallery-info">
+        <div class="gallery-title">தெரு விளக்குகள் அமைத்தல் பணி</div>
+        <div class="gallery-date">முடிவுற்ற நாள்: 05/02/2026</div>
+      </div>
+    </div>
+
+    <div class="gallery-card">
+      <img src="https://via.placeholder.com/600x400?text=Work+3" alt="பணி 3" class="gallery-img" onclick="openImage(this.src, 'சாலை சீரமைப்பு திட்டம்')">
+      <div class="gallery-info">
+        <div class="gallery-title">சாலை சீரமைப்பு திட்டம்</div>
+        <div class="gallery-date">முடிவுற்ற நாள்: 20/01/2026</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="imageModal" onclick="closeImage()">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="closeImage()">&times;</button>
+    <img id="modalImg" src="" alt="">
+    <h3 id="modalTitle" style="color: var(--maroon); margin-top: 14px;"></h3>
+  </div>
+</div>
+
+<footer>
+  ஞாயிறு ஊராட்சி கிராம வளர்ச்சி திட்ட பணிகள் பட்டியல் · தமிழக வெற்றிக் கழகம்
+</footer>
+
+<script>
+  function openImage(src, title) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('imageModal').style.display = 'flex';
+  }
+
+  function closeImage() {
+    document.getElementById('imageModal').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
