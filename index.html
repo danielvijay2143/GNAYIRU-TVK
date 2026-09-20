@@ -244,7 +244,7 @@
     flex-wrap:wrap;
     gap:10px;
     align-items:center;
-    justify-space-between;
+    justify-content:space-between;
     margin-bottom:18px;
   }
 
@@ -308,6 +308,17 @@
     box-shadow: 0 4px 12px rgba(82, 8, 28, 0.25);
   }
 
+  .btn-secondary{
+    background:var(--gold);
+    color:#fff;
+  }
+
+  .btn-secondary:hover{
+    background:var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(169, 102, 10, 0.25);
+  }
+
   .list{
     display:flex;
     flex-direction:column;
@@ -323,7 +334,6 @@
     background:var(--panel);
   }
 
-  /* CARD HOVER & TAB MOVING EFFECTS */
   .card{
     background:var(--panel);
     border:1px solid var(--line);
@@ -446,7 +456,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
 
-  /* FLOATING BUTTON STYLE */
   .floating-btn {
     position: fixed;
     bottom: 24px;
@@ -490,7 +499,6 @@
     transform: rotate(15deg) scale(1.1);
   }
 
-  /* MODAL POP-UP STYLES */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -511,6 +519,8 @@
     border-radius: 14px;
     width: 100%;
     max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     padding: 22px 24px;
     position: relative;
@@ -598,6 +608,69 @@
     box-shadow: 0 4px 12px rgba(82, 8, 28, 0.3);
   }
 
+  /* GALLERY STYLES */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .gallery-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(122, 15, 43, 0.15);
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  .gallery-info {
+    padding: 12px 14px;
+  }
+
+  .gallery-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--maroon);
+    margin: 0 0 4px;
+  }
+
+  .gallery-date {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  /* IMAGE VIEWER MODAL */
+  .image-viewer-card {
+    background: var(--panel);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 650px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .image-viewer-img {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
   @media (max-width:640px){
     .admin-login-btn{
       top:-5px;
@@ -661,7 +734,6 @@
 <header class="band">
   <div class="band-inner">
 
-    <!-- ADMIN LOGIN -->
     <a href="admin.html" class="admin-login-btn">
       🔐 ADMIN LOGIN
     </a>
@@ -684,7 +756,6 @@
 </header>
 
 <div class="stats" id="stats">
-
   <div class="stat">
     <div class="num" id="statTotal">–</div>
     <div class="lbl">மொத்த பணிகள்</div>
@@ -704,18 +775,19 @@
     <div class="num" id="statPending">–</div>
     <div class="lbl">நிலுவையில்</div>
   </div>
-
 </div>
 
 <main>
-
   <div class="status-bar">
     <span id="lastUpdated">தரவு ஏற்றப்படுகிறது…</span>
   </div>
 
   <div class="toolbar">
-
     <div class="filters">
+      <!-- OUR WORKS TAB / BUTTON -->
+      <a href="works.html" class="btn btn-secondary">
+        🖼️ எங்களின் பணிகள்
+      </a>
 
       <select id="filterStatus">
         <option value="">அனைத்து நிலைகளும்</option>
@@ -729,31 +801,25 @@
         id="filterSearch"
         placeholder="காரணம் / துறை தேடுக"
       >
-
     </div>
 
     <button class="btn btn-primary" id="refreshBtn">
       ↻ புதுப்பிக்க
     </button>
-
   </div>
 
   <div class="list" id="list">
     <div class="empty">பணிகள் ஏற்றப்படுகிறது…</div>
   </div>
-
 </main>
 
-<!-- FLOATING BUTTON -->
 <button class="floating-btn" id="openComplaintBtn">
   <span class="floating-btn-icon">✏️</span>
   <span>மக்கள் குறைகள்</span>
 </button>
 
-<!-- MODAL POP-UP -->
 <div class="modal-overlay" id="complaintModal">
   <div class="modal-card">
-    
     <div class="modal-header">
       <h3>மக்கள் குறைகள்</h3>
       <button class="close-btn" id="closeComplaintBtn">&times;</button>
@@ -778,7 +844,6 @@
     <button class="whatsapp-send-btn" id="sendWhatsappBtn">
       WhatsApp அனுப்பு
     </button>
-
   </div>
 </div>
 
@@ -791,363 +856,170 @@
 <script>
 (function(){
 
-  // Google Sheet CSV URL
   const SHEET_CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQh9VFqCq_8tdoRKhNRmSCTeAoraBZBHFJXnWrEN6mmOHUhKXghInVcyybXGjvH4a_r5Q8f195klS2L/pub?output=csv";
 
-  // WhatsApp பெறப்போகும் நிர்வாகி எண் (91 உடன் சேர்க்கவும்)
   const WHATSAPP_NUMBER = "918056202411"; 
 
   const $ = (sel) => document.querySelector(sel);
-
   const list = $("#list");
-
   let works = [];
 
   function statusMeta(status){
-
     const s = (status || "").toUpperCase().trim();
 
     if(s === "COMPLETED"){
-      return {
-        cls:"completed",
-        label:"முடிந்தது"
-      };
+      return { cls: "completed", label: "முடிந்தது" };
     }
-
     if(s === "UNDER PROCESS" || s === "IN PROGRESS"){
-      return {
-        cls:"progress",
-        label:"நடவடிக்கையில்"
-      };
+      return { cls: "progress", label: "நடவடிக்கையில்" };
     }
-
-    return {
-      cls:"pending",
-      label:status ? status : "நிலுவையில்"
-    };
+    return { cls: "pending", label: status ? status : "நிலுவையில்" };
   }
 
   function escapeHtml(str){
-
     return String(str).replace(
       /[&<>"']/g,
-      c => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#39;"
-      }[c])
+      c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
     );
-
   }
 
   function render(){
-
     const statusFilter = $("#filterStatus").value;
-
-    const q =
-      $("#filterSearch").value
-      .trim()
-      .toLowerCase();
+    const q = $("#filterSearch").value.trim().toLowerCase();
 
     let rows = works.slice();
+    let done = 0, prog = 0, pend = 0;
 
-    let done = 0;
-    let prog = 0;
-    let pend = 0;
-
-    rows.forEach(w => {
-
-      const s =
-        (w.status || "")
-        .toUpperCase()
-        .trim();
-
-      if(s === "COMPLETED"){
-        done++;
-      }
-      else if(
-        s === "UNDER PROCESS" ||
-        s === "IN PROGRESS"
-      ){
-        prog++;
-      }
-      else{
-        pend++;
-      }
-
+    works.forEach(w => {
+      const s = (w.status || "").toUpperCase().trim();
+      if(s === "COMPLETED") done++;
+      else if(s === "UNDER PROCESS" || s === "IN PROGRESS") prog++;
+      else pend++;
     });
 
-    $("#statTotal").textContent = rows.length;
+    $("#statTotal").textContent = works.length;
     $("#statDone").textContent = done;
     $("#statProgress").textContent = prog;
     $("#statPending").textContent = pend;
 
     if(statusFilter){
-
       rows = rows.filter(w => {
-
-        const s =
-          (w.status || "")
-          .toUpperCase()
-          .trim();
-
+        const s = (w.status || "").toUpperCase().trim();
         return (
           s === statusFilter ||
-          (
-            statusFilter === "PENDING" &&
-            ![
-              "COMPLETED",
-              "UNDER PROCESS",
-              "IN PROGRESS"
-            ].includes(s)
-          )
+          (statusFilter === "PENDING" && !["COMPLETED", "UNDER PROCESS", "IN PROGRESS"].includes(s))
         );
-
       });
-
     }
 
     if(q){
-
       rows = rows.filter(w =>
         (w.reason || "").toLowerCase().includes(q) ||
         (w.dept || "").toLowerCase().includes(q) ||
         (w.appNo || "").toLowerCase().includes(q)
       );
-
     }
 
     if(rows.length === 0){
-
-      list.innerHTML =
-        '<div class="empty">பணிகள் எதுவும் இல்லை.</div>';
-
+      list.innerHTML = '<div class="empty">பணிகள் எதுவும் இல்லை.</div>';
       return;
     }
 
     list.innerHTML = rows.map(w => {
-
       const sm = statusMeta(w.status);
-
       return `
         <div class="card">
-
-          <div class="no">
-            ${escapeHtml(w.no || "–")}
-          </div>
-
+          <div class="no">${escapeHtml(w.no || "–")}</div>
           <div class="body">
-
-            <p class="reason">
-              ${escapeHtml(w.reason || "")}
-            </p>
-
+            <p class="reason">${escapeHtml(w.reason || "")}</p>
             <div class="meta-row">
-
-              <span>
-                ${escapeHtml(w.date || "")}
-              </span>
-
-              ${
-                w.dept
-                ? `<span class="dept">
-                    ${escapeHtml(w.dept)}
-                   </span>`
-                : ""
-              }
-
-              ${
-                w.appNo
-                ? `<span class="app-no">
-                    ${escapeHtml(w.appNo)}
-                   </span>`
-                : ""
-              }
-
+              <span>${escapeHtml(w.date || "")}</span>
+              ${w.dept ? `<span class="dept">${escapeHtml(w.dept)}</span>` : ""}
+              ${w.appNo ? `<span class="app-no">${escapeHtml(w.appNo)}</span>` : ""}
             </div>
-
           </div>
-
           <div class="right">
-
-            <span class="pill ${sm.cls}">
-              ${sm.label}
-            </span>
-
+            <span class="pill ${sm.cls}">${sm.label}</span>
           </div>
-
         </div>
       `;
-
     }).join("");
-
   }
 
   function findCol(header, candidates){
-
     for(let i = 0; i < header.length; i++){
-
       const h = (header[i] || "").trim();
-
-      if(
-        candidates.some(c => h.includes(c))
-      ){
-        return i;
-      }
-
+      if(candidates.some(c => h.includes(c))) return i;
     }
-
     return -1;
   }
 
   function parseRows(rows){
-
     let headerIdx = -1;
 
     for(let i = 0; i < rows.length; i++){
-
       const joined = rows[i].join("|");
-
-      if(
-        joined.includes("தேதி") &&
-        (
-          joined.includes("எண்") ||
-          joined.includes("காரணம்")
-        )
-      ){
+      if(joined.includes("தேதி") && (joined.includes("எண்") || joined.includes("காரணம்"))){
         headerIdx = i;
         break;
       }
-
     }
 
-    if(headerIdx === -1){
-      return [];
-    }
+    if(headerIdx === -1) return [];
 
     const header = rows[headerIdx];
-
-    const cNo =
-      findCol(header, ["வ. எண்","வ.எண்","எண்"]);
-
-    const cDate =
-      findCol(header, ["தேதி"]);
-
-    const cReason =
-      findCol(header, ["காரணம்"]);
-
-    const cDept =
-      findCol(header, ["துறை"]);
-
-    const cApp =
-      findCol(header, ["மனு"]);
-
-    const cStatus =
-      findCol(header, ["நிலை"]);
+    const cNo = findCol(header, ["வ. எண்", "வ.எண்", "எண்"]);
+    const cDate = findCol(header, ["தேதி"]);
+    const cReason = findCol(header, ["காரணம்"]);
+    const cDept = findCol(header, ["துறை"]);
+    const cApp = findCol(header, ["மனு"]);
+    const cStatus = findCol(header, ["நிலை"]);
 
     const out = [];
 
-    for(
-      let i = headerIdx + 1;
-      i < rows.length;
-      i++
-    ){
-
+    for(let i = headerIdx + 1; i < rows.length; i++){
       const r = rows[i];
-
-      const reason =
-        cReason >= 0
-        ? (r[cReason] || "").trim()
-        : "";
-
-      if(!reason){
-        continue;
-      }
+      const reason = cReason >= 0 ? (r[cReason] || "").trim() : "";
+      if(!reason) continue;
 
       out.push({
-
-        no:
-          cNo >= 0
-          ? (r[cNo] || "").trim()
-          : "",
-
-        date:
-          cDate >= 0
-          ? (r[cDate] || "").trim()
-          : "",
-
+        no: cNo >= 0 ? (r[cNo] || "").trim() : "",
+        date: cDate >= 0 ? (r[cDate] || "").trim() : "",
         reason,
-
-        dept:
-          cDept >= 0
-          ? (r[cDept] || "").trim()
-          : "",
-
-        appNo:
-          cApp >= 0
-          ? (r[cApp] || "").trim()
-          : "",
-
-        status:
-          cStatus >= 0
-          ? (r[cStatus] || "").trim()
-          : ""
-
+        dept: cDept >= 0 ? (r[cDept] || "").trim() : "",
+        appNo: cApp >= 0 ? (r[cApp] || "").trim() : "",
+        status: cStatus >= 0 ? (r[cStatus] || "").trim() : ""
       });
-
     }
 
     return out;
   }
 
-  function loadData(){
-
-    if(
-      !SHEET_CSV_URL ||
-      SHEET_CSV_URL.indexOf("PASTE_YOUR") === 0
-    ){
-
-      list.innerHTML =
-        '<div class="empty">' +
-        'SHEET_CSV_URL இன்னும் அமைக்கப்படவில்லை.' +
-        '</div>';
-
-      $("#lastUpdated").textContent =
-        "அமைக்கப்படவில்லை";
-
+  async function loadData(){
+    if(!SHEET_CSV_URL || SHEET_CSV_URL.indexOf("PASTE_YOUR") === 0){
+      list.innerHTML = '<div class="empty">SHEET_CSV_URL இன்னும் அமைக்கப்படவில்லை.</div>';
+      $("#lastUpdated").textContent = "அமைக்கப்படவில்லை";
       return;
     }
 
-    Papa.parse(SHEET_CSV_URL, {
+    try {
+      const response = await fetch(SHEET_CSV_URL);
+      const csvText = await response.text();
 
-      download:true,
-
-      complete:function(results){
-
-        works = parseRows(results.data);
-
-        render();
-
-        $("#lastUpdated").textContent =
-          "கடைசியாகப் புதுப்பிக்கப்பட்டது: " +
-          new Date().toLocaleString("ta-IN");
-
-      },
-
-      error:function(){
-
-        list.innerHTML =
-          '<div class="empty">' +
-          'தரவை ஏற்ற இயலவில்லை. Sheet publish செய்யப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.' +
-          '</div>';
-
-      }
-
-    });
-
+      Papa.parse(csvText, {
+        complete: function(results){
+          works = parseRows(results.data);
+          render();
+          $("#lastUpdated").textContent = "கடைசியாகப் புதுப்பிக்கப்பட்டது: " + new Date().toLocaleString("ta-IN");
+        },
+        error: function(){
+          list.innerHTML = '<div class="empty">தரவை பகுப்பாய்வு செய்ய இயலவில்லை.</div>';
+        }
+      });
+    } catch(err) {
+      list.innerHTML = '<div class="empty">தரவை ஏற்ற இயலவில்லை. Sheet publish செய்யப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</div>';
+    }
   }
 
   // POPUP LOGIC
@@ -1178,7 +1050,6 @@
     }
 
     const text = `வணக்கம்! மக்கள் குறைகள் பற்றிய தகவல்:\n\n👤 பெயர்: ${name}\n📞 தொடர்பு எண்: ${phone}\n📝 குறை: ${complaint || 'குறிப்பிடப்படவில்லை'}`;
-
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
 
@@ -1188,21 +1059,12 @@
     $("#userComplaint").value = "";
   });
 
-  $("#filterStatus")
-    .addEventListener("change", render);
-
-  $("#filterSearch")
-    .addEventListener("input", render);
-
-  $("#refreshBtn")
-    .addEventListener("click", loadData);
+  $("#filterStatus").addEventListener("change", render);
+  $("#filterSearch").addEventListener("input", render);
+  $("#refreshBtn").addEventListener("click", loadData);
 
   loadData();
-
-  setInterval(
-    loadData,
-    5 * 60 * 1000
-  );
+  setInterval(loadData, 5 * 60 * 1000);
 
 })();
 </script>
