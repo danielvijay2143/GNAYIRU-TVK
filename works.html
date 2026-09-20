@@ -96,7 +96,7 @@
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
   }
 
@@ -117,18 +117,11 @@
     border-color: var(--gold-soft);
   }
 
-  .image-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: var(--line);
-  }
-
   .img-box {
     position: relative;
     overflow: hidden;
     background: #EFEAE0;
-    height: 180px;
+    height: 200px;
   }
 
   .img-box img {
@@ -141,23 +134,6 @@
 
   .img-box img:hover {
     transform: scale(1.05);
-  }
-
-  .badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    backdrop-filter: blur(2px);
-  }
-
-  .badge.after-badge {
-    background: var(--green);
   }
 
   .gallery-info {
@@ -200,6 +176,7 @@
     border: 1px dashed var(--line);
     border-radius: var(--radius);
     background: var(--panel);
+    grid-column: 1 / -1;
   }
 
   /* MODAL */
@@ -320,8 +297,8 @@
     const cReason = findCol(header, ["காரணம்"]);
     const cDept = findCol(header, ["துறை"]);
     const cStatus = findCol(header, ["நிலை"]);
-    const cBefore = findCol(header, ["before", "முன்பு"]);
-    const cAfter = findCol(header, ["after", "பின்பு"]);
+    // Detect single image column (or fallback to before image if available)
+    const cImg = findCol(header, ["image", "photo", "படங்கள்", "படம்", "before"]);
 
     const out = [];
 
@@ -329,14 +306,12 @@
       const r = rows[i];
       const status = cStatus >= 0 ? (r[cStatus] || "").toUpperCase().trim() : "";
       
-      // Filter ONLY completed tasks
       if(status === "COMPLETED"){
         out.push({
           date: cDate >= 0 ? (r[cDate] || "").trim() : "",
           reason: cReason >= 0 ? (r[cReason] || "").trim() : "",
           dept: cDept >= 0 ? (r[cDept] || "").trim() : "",
-          beforeImg: cBefore >= 0 ? (r[cBefore] || "").trim() : "",
-          afterImg: cAfter >= 0 ? (r[cAfter] || "").trim() : ""
+          img: cImg >= 0 ? (r[cImg] || "").trim() : ""
         });
       }
     }
@@ -352,20 +327,12 @@
 
     galleryGrid.innerHTML = items.map(item => {
       const defaultImg = "https://via.placeholder.com/400x300?text=No+Image";
-      const before = item.beforeImg || defaultImg;
-      const after = item.afterImg || defaultImg;
+      const imgSrc = item.img || defaultImg;
 
       return `
         <div class="gallery-card">
-          <div class="image-container">
-            <div class="img-box">
-              <span class="badge">BEFORE</span>
-              <img src="${escapeHtml(before)}" alt="Before" onclick="openImage('${escapeHtml(before)}', '${escapeHtml(item.reason)} (முன்பு)')">
-            </div>
-            <div class="img-box">
-              <span class="badge after-badge">AFTER</span>
-              <img src="${escapeHtml(after)}" alt="After" onclick="openImage('${escapeHtml(after)}', '${escapeHtml(item.reason)} (பின்பு)')">
-            </div>
+          <div class="img-box">
+            <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(item.reason)}" onclick="openImage('${escapeHtml(imgSrc)}', '${escapeHtml(item.reason)}')">
           </div>
           <div class="gallery-info">
             <div class="gallery-title">${escapeHtml(item.reason)}</div>
