@@ -9,11 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
 <style>
   :root{
     --maroon:#7A0F2B;
     --maroon-dark:#52081C;
-    --maroon-tint:#F4E4E8;
     --gold:#C08A26;
     --gold-soft:#E7C878;
     --cream:#FBF6EC;
@@ -22,6 +23,7 @@
     --ink-soft:#6E5F52;
     --line:#E6DCC9;
     --green:#1E7A45;
+    --green-bg:#E3F3E7;
     --radius:10px;
   }
 
@@ -94,8 +96,8 @@
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
   }
 
   .gallery-card {
@@ -105,6 +107,8 @@
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
   }
 
   .gallery-card:hover {
@@ -113,28 +117,89 @@
     border-color: var(--gold-soft);
   }
 
-  .gallery-img {
+  .image-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--line);
+  }
+
+  .img-box {
+    position: relative;
+    overflow: hidden;
+    background: #EFEAE0;
+    height: 180px;
+  }
+
+  .img-box img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
-    display: block;
     cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .img-box img:hover {
+    transform: scale(1.05);
+  }
+
+  .badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(2px);
+  }
+
+  .badge.after-badge {
+    background: var(--green);
   }
 
   .gallery-info {
-    padding: 14px 16px;
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .gallery-title {
-    font-size: 16px;
+    font-size: 16.5px;
     font-weight: 700;
     color: var(--maroon);
-    margin: 0 0 6px;
+    margin: 0 0 8px;
   }
 
-  .gallery-date {
+  .meta-tags {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 13px;
     color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  .dept-pill {
+    background: var(--green-bg);
+    color: var(--green);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-soft);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
   }
 
   /* MODAL */
@@ -144,7 +209,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     justify-content: center;
     align-items: center;
@@ -156,7 +221,7 @@
     background: var(--panel);
     border-radius: 14px;
     width: 100%;
-    max-width: 650px;
+    max-width: 700px;
     padding: 20px;
     position: relative;
     text-align: center;
@@ -164,7 +229,7 @@
 
   .modal-card img {
     width: 100%;
-    max-height: 70vh;
+    max-height: 75vh;
     object-fit: contain;
     border-radius: 8px;
   }
@@ -173,7 +238,7 @@
     position: absolute;
     top: 10px;
     right: 16px;
-    font-size: 26px;
+    font-size: 28px;
     background: none;
     border: none;
     cursor: pointer;
@@ -203,30 +268,7 @@
 
 <main>
   <div class="gallery-grid" id="galleryGrid">
-    <!-- SAMPLE WORK ITEMS (Replace images/descriptions with your actual files) -->
-    <div class="gallery-card">
-      <img src="https://via.placeholder.com/600x400?text=Work+1" alt="பணி 1" class="gallery-img" onclick="openImage(this.src, 'குடிநீர் சுத்திகரிப்பு நிலையம் பராமரிப்பு')">
-      <div class="gallery-info">
-        <div class="gallery-title">குடிநீர் சுத்திகரிப்பு நிலையம் பராமரிப்பு</div>
-        <div class="gallery-date">முடிவுற்ற நாள்: 12/03/2026</div>
-      </div>
-    </div>
-
-    <div class="gallery-card">
-      <img src="https://via.placeholder.com/600x400?text=Work+2" alt="பணி 2" class="gallery-img" onclick="openImage(this.src, 'தெரு விளக்குகள் அமைத்தல் பணி')">
-      <div class="gallery-info">
-        <div class="gallery-title">தெரு விளக்குகள் அமைத்தல் பணி</div>
-        <div class="gallery-date">முடிவுற்ற நாள்: 05/02/2026</div>
-      </div>
-    </div>
-
-    <div class="gallery-card">
-      <img src="https://via.placeholder.com/600x400?text=Work+3" alt="பணி 3" class="gallery-img" onclick="openImage(this.src, 'சாலை சீரமைப்பு திட்டம்')">
-      <div class="gallery-info">
-        <div class="gallery-title">சாலை சீரமைப்பு திட்டம்</div>
-        <div class="gallery-date">முடிவுற்ற நாள்: 20/01/2026</div>
-      </div>
-    </div>
+    <div class="empty">பணிகள் ஏற்றப்படுகிறது…</div>
   </div>
 </main>
 
@@ -243,15 +285,131 @@
 </footer>
 
 <script>
-  function openImage(src, title) {
-    document.getElementById('modalImg').src = src;
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('imageModal').style.display = 'flex';
+(function(){
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQh9VFqCq_8tdoRKhNRmSCTeAoraBZBHFJXnWrEN6mmOHUhKXghInVcyybXGjvH4a_r5Q8f195klS2L/pub?output=csv";
+
+  const $ = (sel) => document.querySelector(sel);
+  const galleryGrid = $("#galleryGrid");
+
+  function escapeHtml(str){
+    return String(str || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
-  function closeImage() {
-    document.getElementById('imageModal').style.display = 'none';
+  function findCol(header, candidates){
+    for(let i = 0; i < header.length; i++){
+      const h = (header[i] || "").trim().toLowerCase();
+      if(candidates.some(c => h.includes(c))) return i;
+    }
+    return -1;
   }
+
+  function parseCompletedRows(rows){
+    let headerIdx = -1;
+    for(let i = 0; i < rows.length; i++){
+      const joined = rows[i].join("|");
+      if(joined.includes("தேதி") && (joined.includes("எண்") || joined.includes("காரணம்"))){
+        headerIdx = i;
+        break;
+      }
+    }
+
+    if(headerIdx === -1) return [];
+
+    const header = rows[headerIdx];
+    const cDate = findCol(header, ["தேதி"]);
+    const cReason = findCol(header, ["காரணம்"]);
+    const cDept = findCol(header, ["துறை"]);
+    const cStatus = findCol(header, ["நிலை"]);
+    const cBefore = findCol(header, ["before", "முன்பு"]);
+    const cAfter = findCol(header, ["after", "பின்பு"]);
+
+    const out = [];
+
+    for(let i = headerIdx + 1; i < rows.length; i++){
+      const r = rows[i];
+      const status = cStatus >= 0 ? (r[cStatus] || "").toUpperCase().trim() : "";
+      
+      // Filter ONLY completed tasks
+      if(status === "COMPLETED"){
+        out.push({
+          date: cDate >= 0 ? (r[cDate] || "").trim() : "",
+          reason: cReason >= 0 ? (r[cReason] || "").trim() : "",
+          dept: cDept >= 0 ? (r[cDept] || "").trim() : "",
+          beforeImg: cBefore >= 0 ? (r[cBefore] || "").trim() : "",
+          afterImg: cAfter >= 0 ? (r[cAfter] || "").trim() : ""
+        });
+      }
+    }
+
+    return out;
+  }
+
+  function renderGallery(items){
+    if(items.length === 0){
+      galleryGrid.innerHTML = '<div class="empty">நிறைவுற்ற பணிகள் எதுவும் கிடைக்கவில்லை.</div>';
+      return;
+    }
+
+    galleryGrid.innerHTML = items.map(item => {
+      const defaultImg = "https://via.placeholder.com/400x300?text=No+Image";
+      const before = item.beforeImg || defaultImg;
+      const after = item.afterImg || defaultImg;
+
+      return `
+        <div class="gallery-card">
+          <div class="image-container">
+            <div class="img-box">
+              <span class="badge">BEFORE</span>
+              <img src="${escapeHtml(before)}" alt="Before" onclick="openImage('${escapeHtml(before)}', '${escapeHtml(item.reason)} (முன்பு)')">
+            </div>
+            <div class="img-box">
+              <span class="badge after-badge">AFTER</span>
+              <img src="${escapeHtml(after)}" alt="After" onclick="openImage('${escapeHtml(after)}', '${escapeHtml(item.reason)} (பின்பு)')">
+            </div>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">${escapeHtml(item.reason)}</div>
+            <div class="meta-tags">
+              <span>${escapeHtml(item.date)}</span>
+              ${item.dept ? `<span class="dept-pill">${escapeHtml(item.dept)}</span>` : ""}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function loadData(){
+    try {
+      const response = await fetch(SHEET_CSV_URL);
+      const csvText = await response.text();
+
+      Papa.parse(csvText, {
+        complete: function(results){
+          const completedWorks = parseCompletedRows(results.data);
+          renderGallery(completedWorks);
+        },
+        error: function(){
+          galleryGrid.innerHTML = '<div class="empty">தரவை பகுப்பாய்வு செய்ய இயலவில்லை.</div>';
+        }
+      });
+    } catch(err) {
+      galleryGrid.innerHTML = '<div class="empty">தரவை ஏற்ற இயலவில்லை.</div>';
+    }
+  }
+
+  window.openImage = function(src, title) {
+    $("#modalImg").src = src;
+    $("#modalTitle").textContent = title;
+    $("#imageModal").style.display = 'flex';
+  };
+
+  window.closeImage = function() {
+    $("#imageModal").style.display = 'none';
+  };
+
+  loadData();
+})();
 </script>
 
 </body>
